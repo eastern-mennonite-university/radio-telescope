@@ -9,6 +9,12 @@ const int z_dir = 7;
 
 const int enable = 8;
 
+// Experimentally, this has to be greater than 500 when on full step
+const int step_microseconds = 500;
+const int full_steps_per_revolution = floor(28.65 * 200);
+// 1=full step, 2=half step, 4=quarter, etc.
+const int pulses_per_step = 1;
+
 void setup() {
   pinMode(x_step, OUTPUT);
   pinMode(y_step, OUTPUT);
@@ -20,20 +26,20 @@ void setup() {
 
 void loop() {
   digitalWrite(x_dir, HIGH);
-  for(int x=0; x<200; x++){
+  for(int x=0; x<full_steps_per_revolution*pulses_per_step; x++){
     digitalWrite(x_step, HIGH);
-    delay(1);
+    delayMicroseconds(step_microseconds);
     digitalWrite(x_step, LOW);
-    delay(1);
+    delayMicroseconds(step_microseconds);
   }
   delay(1000);
 
   digitalWrite(x_dir, LOW);
-  for(int x=0; x<200; x++){
+  for(int x=0; x<full_steps_per_revolution*pulses_per_step; x++){
     digitalWrite(x_step, HIGH);
-    delay(1);
+    delayMicroseconds(step_microseconds);
     digitalWrite(x_step, LOW);
-    delay(1);
+    delayMicroseconds(step_microseconds);
   }
 
   delay(1000);
