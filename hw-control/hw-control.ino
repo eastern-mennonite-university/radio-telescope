@@ -52,16 +52,7 @@ void loop() {
     Serial.print(command);
     Serial.println("'");
     
-    if (command.indexOf("pos")>=0){
-      Serial.println("pos OK (00.00, 000.00)");
-    } else if (command.indexOf("trace")>=0) {
-      Serial.println("trace OK");
-    } else if (command.indexOf("set")>=0) {
-      Serial.println("set OK");
-    } else {
-      Serial.println("invalid");
-    }
-    Serial.println();
+    x_stepper.setSpeed(command.toInt());
   }
   x_stepper.runSpeed();
   
