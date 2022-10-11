@@ -8,7 +8,7 @@ This folder holds code relating to the hardware control parts of the project (an
 `set (aa.aa, zzz.zz)` (set position) sets a position
 - Returns `set OK` when command is received
 
-`trace (aa.aa, zzz.zz, AA.AA, ZZZ>ZZ, time)` traces out a sky line from (a, z) to (A, Z) over time
+`trace (aa.aa, zzz.zz, AA.AA, ZZZ.ZZ, time)` traces out a sky line from (a, z) to (A, Z) over time seconds
 - Returns `trace OK` when command is received
 
 All messages end in newline (enter).
