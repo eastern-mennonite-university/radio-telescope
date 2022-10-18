@@ -9,34 +9,17 @@ const int z_dir_pin = 7;
 
 const int enable = 8;
 
-int x_step = LOW;
-int y_step = LOW;
-int z_step = LOW;
-
-int x_dir = 0;
-int y_dir = LOW;
-int z_dir = LOW;
-
-// Experimentally, this has to be greater than 500 when on full step
-const int step_microseconds = 500;
-const int full_steps_per_revolution = floor(28.65 * 200);
-// 1=full step, 2=half step, 4=quarter, etc.
-const int pulses_per_step = 1;
-
-int x_pos = 0;
-int x_sp = 0;
-int x_t = micros();
+// Notes to play the cello part of Canon in D (chosen because notes are equal length and form a cycle)
+// Frequencies in Hz of D A B F# G D G A
+const int bass[] = {587, 440, 494, 370, 392, 294, 392, 440};
+// F# E D C# B A B C#
+const int tenor[] = {740, 659, 587, 554, 494, 440, 494, 554};
 
 AccelStepper x_stepper = AccelStepper(AccelStepper::DRIVER, x_step_pin, x_dir_pin);
+AccelStepper y_stepper = AccelStepper(AccelStepper::DRIVER, y_step_pin, y_dir_pin);
+AccelStepper z_stepper = AccelStepper(AccelStepper::DRIVER, z_step_pin, z_dir_pin);
 
 void setup() {
-  pinMode(x_step_pin, OUTPUT);
-  pinMode(y_step_pin, OUTPUT);
-  pinMode(z_step_pin, OUTPUT);
-  pinMode(x_dir_pin, OUTPUT);
-  pinMode(y_dir_pin, OUTPUT);
-  pinMode(z_dir_pin, OUTPUT);
-
   Serial.begin(9600);
   x_stepper.setMaxSpeed(1000);
   x_stepper.setSpeed(800);
@@ -51,9 +34,14 @@ void loop() {
     Serial.print("Echo: '");
     Serial.print(command);
     Serial.println("'");
-    
-    x_stepper.setSpeed(command.toInt());
+
+    int command_int = command.toInt();
+    if (command_int >= 0){
+      x_stepper.setSpeed(command.toInt());
+    } else {
+      
+    }
   }
+  x_stepper.setSpeed(bass[int(millis()/1500)%8]);
   x_stepper.runSpeed();
-  
 }
