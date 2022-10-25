@@ -19,10 +19,14 @@ AccelStepper x_stepper = AccelStepper(AccelStepper::DRIVER, x_step_pin, x_dir_pi
 AccelStepper y_stepper = AccelStepper(AccelStepper::DRIVER, y_step_pin, y_dir_pin);
 AccelStepper z_stepper = AccelStepper(AccelStepper::DRIVER, z_step_pin, z_dir_pin);
 
+int music = 0;
+
 void setup() {
   Serial.begin(9600);
   x_stepper.setMaxSpeed(1000);
-  x_stepper.setSpeed(800);
+  x_stepper.setSpeed(0);
+  y_stepper.setMaxSpeed(1000);
+  y_stepper.setSpeed(0);
 }
 
 void loop() {
@@ -38,10 +42,21 @@ void loop() {
     int command_int = command.toInt();
     if (command_int >= 0){
       x_stepper.setSpeed(command.toInt());
+      y_stepper.setSpeed(command.toInt());
+      music = 0;
     } else {
-      
+      music = 1;
     }
   }
-  x_stepper.setSpeed(bass[int(millis()/1500)%8]);
-  x_stepper.runSpeed();
+  if(music){
+    x_stepper.setSpeed(bass[int(millis()/1500)%8]);
+    y_stepper.setSpeed(tenor[int(millis()/1500)%8]);
+  }
+  if (x_stepper.speed() != 0){
+    x_stepper.runSpeed();
+    y_stepper.runSpeed();
+  } else {
+    x_stepper.stop();
+    y_stepper.stop();
+  }
 }
