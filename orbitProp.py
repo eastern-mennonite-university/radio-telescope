@@ -1,4 +1,4 @@
-rom ephem import *
+from ephem import *
 from datetime import datetime
 import time
 
