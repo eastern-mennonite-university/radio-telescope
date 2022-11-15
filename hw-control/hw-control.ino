@@ -27,11 +27,16 @@ float altitude = 0;
 
 char* command_args[10];
 char* command_arg;
+
+bool moving = false;
+
 void setup() {
   Serial.begin(9600);
   x_stepper.setMaxSpeed(1000);
+  x_stepper.setAcceleration(600);
   x_stepper.setSpeed(0);
   y_stepper.setMaxSpeed(1000);
+  y_stepper.setAcceleration(600);
   y_stepper.setSpeed(0);
 }
 
@@ -48,7 +53,7 @@ void loop() {
     // TODO: I'm pretty sure this is bad, unsafe code. Not sure how to fix it -Caleb
     command_arg = strtok(buff, " ");
     command_args[0] = command_arg;
-    int i = 1;
+    int i = 0;
     while (command_arg != NULL && i<10){
       command_args[i] = command_arg;
 //      Serial.println(command_arg);
@@ -58,6 +63,13 @@ void loop() {
 
     if (strcmp(command_args[0], "music")==0){
       music = 1;
+    } else if (strcmp(command_args[0], "set")==0){
+      float altitude = atof(command_args[1]);
+      float azimuth = atof(command_args[2]);
+      x_stepper.moveTo(int(altitude));
+      y_stepper.moveTo(int(azimuth));
+      moving = true;
+      Serial.println("set OK");
     } else {
       int command_int = atoi(command_args[0]);
       x_stepper.setSpeed(command_int);
@@ -69,24 +81,19 @@ void loop() {
   doAction();
 }
 
-char* getPos(){
-  char strBuff[50];
-  sprintf(strBuff, "(%.3f,%.3f)", altitude, azimuth);
-  return strBuff;
-}
-
 void doAction() {
   if(music){
     x_stepper.setSpeed(bass[int(millis()/1500)%8]);
     y_stepper.setSpeed(tenor[int(millis()/1500)%8]);
   }
-  if (x_stepper.speed() != 0){
-    x_stepper.runSpeed();
-    y_stepper.runSpeed();
-  } else {
-    x_stepper.stop();
-    y_stepper.stop();
+  if (moving){
+    if (x_stepper.distanceToGo()==0 && y_stepper.distanceToGo()==0){
+      moving = false;
+      Serial.println("set DONE");
+    }
   }
+  x_stepper.run();
+  y_stepper.run();
 }
 
 int readLine(int readch, char *buffer, int len) {
