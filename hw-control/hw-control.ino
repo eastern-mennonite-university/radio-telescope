@@ -23,16 +23,8 @@ const int Y_LIMIT_PIN = 10;
 
 const int enable = 8;
 
-// Notes to play the cello part of Canon in D (chosen because notes are equal length and form a cycle)
-// Frequencies in Hz of D A B F# G D G A
-const int bass[] = {587, 440, 494, 370, 392, 294, 392, 440};
-// F# E D C# B A B C#
-const int tenor[] = {740, 659, 587, 554, 494, 440, 494, 554};
-
 AccelStepper x_stepper = AccelStepper(AccelStepper::DRIVER, X_STEP_PIN, X_DIR_PIN);
 AccelStepper y_stepper = AccelStepper(AccelStepper::DRIVER, Y_STEP_PIN, Y_DIR_PIN);
-
-int music = 0;
 
 // Max and min altitude and azimuth are determined by the position of the box and limit switches
 // Azimuth: 0deg=North, 90deg=East, etc.
