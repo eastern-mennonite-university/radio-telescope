@@ -8,6 +8,8 @@ enum state {
   CALIBRATE_UP,
   CALIBRATE_DOWN,
   MOVE,
+  X_LIMIT,
+  Y_LIMIT,
   WAIT
 };
 
@@ -177,10 +179,42 @@ void doAction() {
       if (x_stepper.distanceToGo() == 0 && y_stepper.distanceToGo() == 0){
         current_state = WAIT;
       }
-      
+      if (digitalRead(X_LIMIT_PIN)==0){
+        current_state = X_LIMIT;
+      } else if (digitalRead(Y_LIMIT_PIN)==0){
+        current_state = Y_LIMIT;
+      }
+      break;
+    case X_LIMIT:
+      // If we hit a limit switch, we need to move the target backwards and run until we are no longer on the switch
+      if (x_stepper.speed()>0) {
+        x_stepper.moveTo(min_azimuth_steps);
+      } else {
+        x_stepper.moveTo(max_azimuth_steps);
+      }
+      while(digitalRead(X_LIMIT_PIN)==0){
+        x_stepper.run();
+      }
+      target_azimuth = int(x_stepper.currentPosition());
+      x_stepper.moveTo(target_azimuth);
+      current_state = MOVE;
+      break;
+    case Y_LIMIT:
+      // If we hit a limit switch, we need to move the target backwards and run until we are no longer on the switch
+      if (y_stepper.speed()>0) {
+        y_stepper.moveTo(min_altitude_steps);
+      } else {
+        y_stepper.moveTo(max_altitude_steps);
+      }
+      while(digitalRead(Y_LIMIT_PIN)==0){
+        y_stepper.run();
+      }
+      target_altitude = int(y_stepper.currentPosition());
+      y_stepper.moveTo(target_altitude);
+      current_state = MOVE;
       break;
     case WAIT:
-      delay(100);
+      delay(200);
       break;
       
   }
