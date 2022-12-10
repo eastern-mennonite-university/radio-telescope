@@ -1,0 +1,87 @@
+<html>
+    <body style="background-color: lightblue;">
+
+<h1 style="text-align: center;">Trace</h1>
+
+<div id="Trace" style="width: 230px; height: 160px; background-color: white; border: 5px solid green; display: inline-block; float:left;">
+  <p style="text-align: center;">Object Over Time</p>
+  <select>
+    <option value="1">Sun</option>
+    <option value="2">Moon</option>
+    <option value="3">Mercury</option>
+    <option value="4">Venus</option>
+    <option value="5">Earth</option>
+    <option value="6">Mars</option>
+    <option value="7">Jupiter</option>
+    <option value="8">Saturn</option>
+    <option value="9">Uranus</option>
+    <option value="10">Neptune</option>
+  </select>
+  <br />
+  <select>
+    <option value="1">1 min</option>
+    <option value="2">5 min</option>
+    <option value="2">10 min</option>
+    <option value="2">15 min</option>
+    <option value="2">20 min</option>
+    <option value="2">30 min</option>
+    <option value="2">1 hour</option>
+    <option value="2">2 hours</option>
+    <option value="2">3 hours</option>
+  </select>
+  <br />
+  <button>Go!</button>
+  <br />
+</div>
+
+<div id="Stellarium" style="width: 230px; height: 160px; background-color: white; border: 5px solid green; display: inline-block;">
+  <p style="text-align: center;">Data Links</p>
+  <html>
+<body>
+
+<p>To download data, click below</p>
+
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Main_Page">Wikipedia</a></li>
+  <li><a href="https://www.nytimes.com/">The New York Times</a></li>
+  <li><a href="https://www.youtube.com/">YouTube</a></li>
+</ul>
+
+</body>
+</html>
+</div>
+
+<br>
+
+<div id="Coordinates" style="width: 230px; height: 160px; background-color: white; border: 5px solid green; display: inline-block; float:left;">
+  <p style="text-align: center;">Coordinates over time</p>
+  <input type="text" placeholder="Alititude" />
+  <br />
+  <input type="text" placeholder="Azimuth" />
+  <br />
+  <select>
+    <option value="1">1 min</option>
+    <option value="2">5 min</option>
+    <option value="2">10 min</option>
+    <option value="2">15 min</option>
+    <option value="2">20 min</option>
+    <option value="2">30 min</option>
+    <option value="2">1 hour</option>
+    <option value="2">2 hours</option>
+    <option value="2">3 hours</option>
+  </select>
+  <br />
+  <br />
+  <button style="text-align: center;">Go!</button>
+  <br />
+</div>
+
+<div id="Image" style="width: 230px; height: 160px; background-color: white; border: 5px solid green ; display: inline-block;">
+  <p style="text-align: center;">Image</p>
+<img src="k.jpg" alt="My Image"
+width="160"
+height="100">
+</div>
+
+</body>
+</html>
