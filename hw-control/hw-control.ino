@@ -91,8 +91,11 @@ void loop() {
     if (strcmp(command_args[0], "set")==0){
       float input_altitude = atof(command_args[1]);
       float input_azimuth = atof(command_args[2]);
+      if (input_azimuth > MAX_AZIMUTH_DEGREES){
+        input_azimuth = input_azimuth - 360.0;
+      }
       if (input_altitude > MAX_ALTITUDE_DEGREES || input_altitude < MIN_ALTITUDE_DEGREES || input_azimuth > MAX_AZIMUTH_DEGREES || input_azimuth < MIN_AZIMUTH_DEGREES){
-        Serial.print("set error: angle out of range");
+        Serial.println("set error: angle out of range");
       } else {
         target_altitude = int((input_altitude-MAX_ALTITUDE_DEGREES)*altitude_steps_per_degree + min_altitude_steps);
         target_azimuth = int((input_azimuth-MAX_AZIMUTH_DEGREES)*azimuth_steps_per_degree + min_azimuth_steps);
@@ -108,6 +111,8 @@ void loop() {
       Serial.print(", ");
       Serial.print((azimuth_steps-min_azimuth_steps)/(azimuth_steps_per_degree) + MIN_AZIMUTH_DEGREES);
       Serial.println(")");
+    } else {
+      Serial.println("invalid command");
     }
   }
 
@@ -124,6 +129,7 @@ void doAction() {
       if (digitalRead(X_LIMIT_PIN)==0){
         current_state = CALIBRATE_CCW;
         max_azimuth_steps = azimuth_steps;
+        Serial.println("CW Done");
       } else {
         x_stepper.setSpeed(500);
         if (x_stepper.runSpeed()){
@@ -136,10 +142,14 @@ void doAction() {
         current_state = CALIBRATE_UP;
         min_azimuth_steps = azimuth_steps;
         x_stepper.setSpeed(0);
+        Serial.println("CCW Done");
       } else {
         x_stepper.setSpeed(-500);
         if (x_stepper.runSpeed()){
-          azimuth_steps++;
+          azimuth_steps--;
+//          Serial.print(max_azimuth_steps);
+//          Serial.print(", ");
+//          Serial.println(azimuth_steps);
         }
       }
       break;
@@ -147,6 +157,7 @@ void doAction() {
       if (digitalRead(Y_LIMIT_PIN)==0){
         current_state = CALIBRATE_DOWN;
         max_altitude_steps = altitude_steps;
+        Serial.println("UP Done");
       } else {
         y_stepper.setSpeed(500);
         if (y_stepper.runSpeed()){
@@ -161,11 +172,12 @@ void doAction() {
         altitude_steps_per_degree = (max_altitude_steps - min_altitude_steps) / (MAX_ALTITUDE_DEGREES - MIN_ALTITUDE_DEGREES);
         target_altitude = 0;
         target_azimuth = 0;
+        Serial.println("calibrate DONE");
         current_state = MOVE;
       } else {
-        y_stepper.setSpeed(500);
+        y_stepper.setSpeed(-500);
         if (y_stepper.runSpeed()){
-          altitude_steps++;
+          altitude_steps--;
         }
       }
       break;
