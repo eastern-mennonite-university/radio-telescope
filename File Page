@@ -1,0 +1,23 @@
+import os
+import cherrypy
+
+#define the directory containing the csv files
+csv_dir = 'FOLDER'
+
+class DownloadCSV(object):
+    @cherrypy.expose
+    def index(self):
+        #list all the csv files in the directory
+        csv_files = os.listdir(csv_dir)
+        html = '<html><head><title>Download CSV Files</title></head><body>'
+        html += '<h1>Download CSV Files</h1>'
+        #loop through the csv files and create links for each one
+        for csv in csv_files:
+            html += '<a href="download/{0}">{0}</a><br />'.format(csv)
+        html += '</body></html>'
+        return html
+    @cherrypy.expose
+    def download(self, filename):
+        csv_file = open(os.path.join(csv_dir, filename), 'rb')
+        cherrypy.response.headers['Content-Type'] = 'text/csv'
+        return csv_file
